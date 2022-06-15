@@ -9,11 +9,11 @@ services:
       - .env
     environment:
       DATABASE_URL: mysql://admin:pwd@snapshot-mysql:3306/snapshot
-    
+
     depends_on:
       - snapshot-mysql
     ports:
-      - "3000:3000"
+      - "4444:4444"
 
   # Snapshot MySQL instance
   snapshot-mysql:
