@@ -60,6 +60,7 @@ export async function verify(body): Promise<any> {
   }
 
   try {
+    // FIXME: VERIFY PRESENTATION HERE ?
     const scores = await snapshot.utils.getScores(
       msg.space,
       jsonParse(proposal.strategies),
@@ -89,6 +90,7 @@ export async function action(body, ipfs, receipt, id): Promise<void> {
   const created = parseInt(msg.timestamp);
   const choice = JSON.stringify(msg.payload.choice);
   const metadata = JSON.stringify(msg.payload.metadata || {});
+  // FIXME VP NEEDS TO BE IN METADATA
   const params = {
     id,
     ipfs,

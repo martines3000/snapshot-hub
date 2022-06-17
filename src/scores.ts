@@ -19,7 +19,10 @@ async function getProposal(id) {
 }
 
 async function getVotes(proposalId) {
-  const query = 'SELECT id, choice, voter FROM votes WHERE proposal = ?';
+  // FIXME: Change query
+  // GET VP FROM METADATA
+  const query =
+    'SELECT id, choice, voter, metadata FROM votes WHERE proposal = ?';
   const votes = await db.queryAsync(query, [proposalId]);
   return votes.map(vote => {
     vote.choice = JSON.parse(vote.choice);
@@ -42,6 +45,7 @@ export async function getScores(
   scoreApiUrl = 'https://score.snapshot.org/api/scores'
 ) {
   try {
+    // FIXME: ADD VP
     const params = {
       space,
       network,
@@ -49,6 +53,8 @@ export async function getScores(
       strategies,
       addresses
     };
+
+    // FIXME
     const res = await fetch(scoreApiUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -78,6 +84,7 @@ export async function getProposalScores(proposalId) {
     let votes: any = await getVotes(proposalId);
     const voters = votes.map(vote => vote.voter);
 
+    // FIXME: Check output, maybe validate here
     // Get scores
     const { scores, state } = await getScores(
       proposal.space,
@@ -87,7 +94,8 @@ export async function getProposalScores(proposalId) {
       parseInt(proposal.snapshot)
     );
 
-    // Add vp to votes
+    // FIXME: Add vp to votes - NO ?
+    // FIXME: Probably dont need this
     votes = votes.map((vote: any) => {
       vote.scores = proposal.strategies.map(
         (strategy, i) => scores[i][vote.voter] || 0

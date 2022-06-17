@@ -14,6 +14,7 @@ const VERSION = '0.1.4';
 
 export default async function ingestor(body) {
   const schemaIsValid = snapshot.utils.validateSchema(envelope, body);
+  // FIXME: Will the schema cause problems ?
   if (schemaIsValid !== true) {
     console.log('[ingestor] Wrong envelope format', schemaIsValid);
     return Promise.reject('wrong envelope format');
@@ -26,6 +27,7 @@ export default async function ingestor(body) {
   const underTs = (ts - under).toFixed();
   const { domain, message, types } = body.data;
 
+  // FIXME: WILL LENGTH CAUSE AN ISSUE
   if (JSON.stringify(body).length > 1e5)
     return Promise.reject('too large message');
 
@@ -96,6 +98,8 @@ export default async function ingestor(body) {
     payload = {
       proposal: message.proposal,
       choice
+      // FIXME ADD VP metadata: {vp: "..."}
+      // metadata: { vp: message.body.}
     };
     type = 'vote';
   }
