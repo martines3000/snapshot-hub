@@ -68,6 +68,7 @@ export async function verify(body): Promise<any> {
       [body.address],
       proposal.snapshot
     );
+
     const totalScore = scores
       .map((score: any) => Object.values(score).reduce((a, b: any) => a + b, 0))
       .reduce((a, b: any) => a + b, 0);
@@ -90,7 +91,7 @@ export async function action(body, ipfs, receipt, id): Promise<void> {
   const created = parseInt(msg.timestamp);
   const choice = JSON.stringify(msg.payload.choice);
   const metadata = JSON.stringify(msg.payload.metadata || {});
-  // FIXME VP NEEDS TO BE IN METADATA
+
   const params = {
     id,
     ipfs,

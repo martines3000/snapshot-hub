@@ -19,8 +19,7 @@ async function getProposal(id) {
 }
 
 async function getVotes(proposalId) {
-  // FIXME: Change query
-  // GET VP FROM METADATA
+  // FIXME
   const query =
     'SELECT id, choice, voter, metadata FROM votes WHERE proposal = ?';
   const votes = await db.queryAsync(query, [proposalId]);
@@ -41,6 +40,7 @@ export async function getScores(
   strategies: any[],
   network: string,
   addresses: string[],
+  vps: any[],
   snapshot: number | string = 'latest',
   scoreApiUrl = 'https://score.snapshot.org/api/scores'
 ) {
@@ -51,7 +51,8 @@ export async function getScores(
       network,
       snapshot,
       strategies,
-      addresses
+      addresses,
+      vps
     };
 
     // FIXME
@@ -83,6 +84,7 @@ export async function getProposalScores(proposalId) {
     // Get votes
     let votes: any = await getVotes(proposalId);
     const voters = votes.map(vote => vote.voter);
+    const vps = votes.map(vote => vote.metadata.vp);
 
     // FIXME: Check output, maybe validate here
     // Get scores
@@ -91,6 +93,7 @@ export async function getProposalScores(proposalId) {
       proposal.strategies,
       proposal.network,
       voters,
+      vps,
       parseInt(proposal.snapshot)
     );
 

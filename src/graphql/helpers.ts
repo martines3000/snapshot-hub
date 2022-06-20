@@ -67,7 +67,8 @@ export function formatProposal(proposal) {
 
 export function formatVote(vote) {
   vote.choice = jsonParse(vote.choice);
-  vote.metadata = {}; // FIXME
+  // FIXME
+  vote.metadata = jsonParse(vote.metadata);
   vote.vp_by_strategy = jsonParse(vote.vp_by_strategy, []);
   vote.space = formatSpace(vote.space, vote.settings);
   return vote;
