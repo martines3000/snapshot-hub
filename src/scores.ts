@@ -54,7 +54,9 @@ export async function getScores(
       addresses,
       vps
     };
-
+    console.log('params');
+    console.log(params);
+    console.log(scoreApiUrl);
     // FIXME
     const res = await fetch(scoreApiUrl, {
       method: 'POST',

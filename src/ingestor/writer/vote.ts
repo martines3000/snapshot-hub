@@ -3,6 +3,7 @@ import { getAddress } from '@ethersproject/address';
 import { jsonParse } from '../../helpers/utils';
 import { getProposal } from '../../helpers/actions';
 import db from '../../helpers/mysql';
+import { getScores } from '../../scores';
 
 export async function verify(body): Promise<any> {
   const msg = jsonParse(body.msg);
@@ -61,14 +62,17 @@ export async function verify(body): Promise<any> {
 
   try {
     // FIXME: VERIFY PRESENTATION HERE ?
-    const scores = await snapshot.utils.getScores(
+    console.log(body);
+    const { scores } = await getScores(
       msg.space,
       jsonParse(proposal.strategies),
       proposal.network,
       [body.address],
-      proposal.snapshot
+      [msg.payload.metadata.vp],
+      proposal.snapshot,
+      process.env.SCORES_URL
     );
-
+    console.log(scores);
     const totalScore = scores
       .map((score: any) => Object.values(score).reduce((a, b: any) => a + b, 0))
       .reduce((a, b: any) => a + b, 0);
