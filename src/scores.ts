@@ -54,9 +54,7 @@ export async function getScores(
       addresses,
       vps
     };
-    console.log('params');
-    console.log(params);
-    console.log(scoreApiUrl);
+
     // FIXME
     const res = await fetch(scoreApiUrl, {
       method: 'POST',
@@ -175,12 +173,13 @@ export async function getProposalScores(proposalId) {
       votes.length,
       proposalId
     ]);
-    console.log(
-      '[scores] Proposal updated',
-      proposal.id,
-      proposal.space,
-      results.scores_state
-    );
+    // FIXME: Uncomment
+    // console.log(
+    //   '[scores] Proposal updated',
+    //   proposal.id,
+    //   proposal.space,
+    //   results.scores_state
+    // );
 
     return results;
   } catch (e) {

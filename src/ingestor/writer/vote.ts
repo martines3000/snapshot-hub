@@ -61,7 +61,7 @@ export async function verify(body): Promise<any> {
   }
 
   try {
-    // FIXME: VERIFY PRESENTATION HERE ?
+    // FIXME: VERIFY PRESENTATION HERE ? ONLY ADD PARAMETER, ITS ALREADY VERIFIED
     console.log(body);
     const { scores } = await getScores(
       msg.space,

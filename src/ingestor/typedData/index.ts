@@ -8,7 +8,7 @@ import { jsonParse, sha256 } from '../../helpers/utils';
 import { isValidAlias } from '../../helpers/alias';
 import { getSpace } from '../../helpers/actions';
 import { storeMsg } from '../highlight';
-import { agent } from '../../veramo/agent';
+import { verifyVP } from '../../veramo/utils';
 
 const NAME = 'snapshot';
 const VERSION = '0.1.4';
@@ -104,26 +104,18 @@ export default async function ingestor(body) {
     type = 'vote';
 
     // FIXME VERIFY HERE
-    console.log('trying to verify vp');
-    console.log(message.metadata.vp);
+
     let res;
-    // try {
-    //   res = await agent.verifyPresentation({
-    //     presentation: message.metadata.vp
-    //     // challenge: 1,
-    //     // domain:
-    //     //   'did:ethr:rinkeby:0x0241abd662da06d0af2f0152a80bc037f65a7f901160cfe1eb35ef3f0c532a2a4d'
-    //   });
-    // } catch (err) {
-    //   console.log(err);
-    // }
-
-    console.log(res);
-
-    console.log('finished verifying');
+    try {
+      const issuer =
+        'did:ethr:rinkeby:0x0241abd662da06d0af2f0152a80bc037f65a7f901160cfe1eb35ef3f0c532a2a4d';
+      res = await verifyVP(body.address, message.metadata.vp, issuer);
+    } catch (err) {
+      console.log(err);
+    }
 
     if (res) console.log('[ingestor] Verifiable presentation is valid');
-    //else return Promise.reject('invalid VP');
+    else return Promise.reject('Invalid VP');
   }
 
   let legacyBody = {
