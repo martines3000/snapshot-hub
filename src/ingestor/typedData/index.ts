@@ -6,7 +6,7 @@ import envelope from './envelope.json';
 import writer from '../writer';
 import { jsonParse, sha256 } from '../../helpers/utils';
 import { isValidAlias } from '../../helpers/alias';
-import { getSpace } from '../../helpers/actions';
+import { getProposal, getSpace } from '../../helpers/actions';
 import { storeMsg } from '../highlight';
 import { verifyVP } from '../../veramo/utils';
 
@@ -93,29 +93,35 @@ export default async function ingestor(body) {
 
   if (type === 'delete-proposal') payload = { proposal: message.proposal };
   if (['vote', 'vote-array', 'vote-string'].includes(type)) {
-    let choice = message.choice;
+    let choice = message.choice,
+      res;
+    const proposal = await getProposal(message.space, message.proposal);
     if (type === 'vote-string') choice = JSON.parse(message.choice);
+
     payload = {
       proposal: message.proposal,
-      choice,
-      metadata: message.metadata
-      // FIXME
+      choice
     };
-    type = 'vote';
 
-    // FIXME VERIFY HERE
+    if (Object.keys(JSON.parse(proposal.plugins)).includes('did')) {
+      payload = {
+        ...payload,
+        metadata: message.metadata
+      };
 
-    let res;
-    try {
-      const issuer =
-        'did:ethr:rinkeby:0x0241abd662da06d0af2f0152a80bc037f65a7f901160cfe1eb35ef3f0c532a2a4d';
-      res = await verifyVP(body.address, message.metadata.vp, issuer);
-    } catch (err) {
-      console.log(err);
+      try {
+        const issuer =
+          'did:ethr:rinkeby:0x0241abd662da06d0af2f0152a80bc037f65a7f901160cfe1eb35ef3f0c532a2a4d';
+        res = await verifyVP(body.address, message.metadata.vp, issuer);
+      } catch (err) {
+        console.log(err);
+      }
+
+      if (res) console.log('[ingestor] Verifiable presentation is valid');
+      else return Promise.reject('Invalid VP');
     }
 
-    if (res) console.log('[ingestor] Verifiable presentation is valid');
-    else return Promise.reject('Invalid VP');
+    type = 'vote';
   }
 
   let legacyBody = {

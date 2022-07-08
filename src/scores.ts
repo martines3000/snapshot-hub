@@ -19,7 +19,6 @@ async function getProposal(id) {
 }
 
 async function getVotes(proposalId) {
-  // FIXME
   const query =
     'SELECT id, choice, voter, metadata FROM votes WHERE proposal = ?';
   const votes = await db.queryAsync(query, [proposalId]);
@@ -40,12 +39,40 @@ export async function getScores(
   strategies: any[],
   network: string,
   addresses: string[],
+  snapshot: number | string = 'latest',
+  scoreApiUrl = 'https://score.snapshot.org/api/scores'
+) {
+  try {
+    const params = {
+      space,
+      network,
+      snapshot,
+      strategies,
+      addresses
+    };
+    const res = await fetch(scoreApiUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ params })
+    });
+    const obj = await res.json();
+    return obj.result;
+  } catch (e) {
+    return Promise.reject(e);
+  }
+}
+
+// FIXME: Modified function from snapshot.js (the above function ^)
+export async function getScoresDID(
+  space: string,
+  strategies: any[],
+  network: string,
+  addresses: string[],
   vps: any[],
   snapshot: number | string = 'latest',
   scoreApiUrl = 'https://score.snapshot.org/api/scores'
 ) {
   try {
-    // FIXME: ADD VP
     const params = {
       space,
       network,
@@ -55,12 +82,12 @@ export async function getScores(
       vps
     };
 
-    // FIXME
     const res = await fetch(scoreApiUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ params })
     });
+
     const obj = await res.json();
     return obj.result;
   } catch (e) {
@@ -84,21 +111,31 @@ export async function getProposalScores(proposalId) {
     // Get votes
     let votes: any = await getVotes(proposalId);
     const voters = votes.map(vote => vote.voter);
-    const vps = votes.map(vote => vote.metadata.vp);
 
-    // FIXME: Check output, maybe validate here
-    // Get scores
-    const { scores, state } = await getScores(
-      proposal.space,
-      proposal.strategies,
-      proposal.network,
-      voters,
-      vps,
-      parseInt(proposal.snapshot)
-    );
+    let scores, state;
 
-    // FIXME: Add vp to votes - NO ?
-    // FIXME: Probably dont need this
+    if (Object.keys(proposal.plugins).includes('did')) {
+      const vps = votes.map(vote => JSON.parse(vote.metadata).vp);
+      ({ scores, state } = await getScoresDID(
+        proposal.space,
+        proposal.strategies,
+        proposal.network,
+        voters,
+        vps,
+        parseInt(proposal.snapshot),
+        process.env.SCORES_URL
+      ));
+    } else {
+      ({ scores, state } = await getScores(
+        proposal.space,
+        proposal.strategies,
+        proposal.network,
+        voters,
+        parseInt(proposal.snapshot),
+        process.env.SCORES_URL
+      ));
+    }
+
     votes = votes.map((vote: any) => {
       vote.scores = proposal.strategies.map(
         (strategy, i) => scores[i][vote.voter] || 0
@@ -113,6 +150,7 @@ export async function getProposalScores(proposalId) {
       votes,
       proposal.strategies
     );
+
     const results = {
       scores_state: proposal.state === 'closed' ? state : 'pending',
       scores: votingClass.resultsByVoteBalance(),
@@ -146,7 +184,7 @@ export async function getProposalScores(proposalId) {
         await db.queryAsync(query2, params);
         if (i) await snapshot.utils.sleep(200);
         i++;
-        // console.log('[scores] Updated votes');
+        console.log('[scores] Updated votes');
       }
 
       // console.log('[scores] Votes updated', votes.length);
@@ -183,6 +221,7 @@ export async function getProposalScores(proposalId) {
 
     return results;
   } catch (e) {
+    console.log(e);
     const ts = (Date.now() / 1e3).toFixed();
     const query = `
       UPDATE proposals

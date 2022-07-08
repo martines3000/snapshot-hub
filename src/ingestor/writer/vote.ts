@@ -3,11 +3,13 @@ import { getAddress } from '@ethersproject/address';
 import { jsonParse } from '../../helpers/utils';
 import { getProposal } from '../../helpers/actions';
 import db from '../../helpers/mysql';
-import { getScores } from '../../scores';
+import { getScoresDID } from '../../scores';
 
 export async function verify(body): Promise<any> {
-  const msg = jsonParse(body.msg);
+  console.log('body');
+  console.log(body);
 
+  const msg = jsonParse(body.msg);
   const schemaIsValid = snapshot.utils.validateSchema(
     snapshot.schemas.vote,
     msg.payload
@@ -61,18 +63,28 @@ export async function verify(body): Promise<any> {
   }
 
   try {
-    // FIXME: VERIFY PRESENTATION HERE ? ONLY ADD PARAMETER, ITS ALREADY VERIFIED
-    console.log(body);
-    const { scores } = await getScores(
-      msg.space,
-      jsonParse(proposal.strategies),
-      proposal.network,
-      [body.address],
-      [msg.payload.metadata.vp],
-      proposal.snapshot,
-      process.env.SCORES_URL
-    );
-    console.log(scores);
+    let scores;
+    if (Object.keys(JSON.parse(proposal.plugins)).includes('did')) {
+      ({ scores } = await getScoresDID(
+        msg.space,
+        jsonParse(proposal.strategies),
+        proposal.network,
+        [body.address],
+        [msg.payload.metadata.vp],
+        proposal.snapshot,
+        process.env.SCORES_URL
+      ));
+    } else {
+      scores = await snapshot.utils.getScores(
+        msg.space,
+        jsonParse(proposal.strategies),
+        proposal.network,
+        [body.address],
+        proposal.snapshot,
+        process.env.SCORES_URL
+      );
+    }
+
     const totalScore = scores
       .map((score: any) => Object.values(score).reduce((a, b: any) => a + b, 0))
       .reduce((a, b: any) => a + b, 0);
