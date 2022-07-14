@@ -11,11 +11,10 @@
   "dependencies": {
     "@ethersproject/address": "^5.0.1",
     "@ethersproject/hash": "^5.5.0",
-    "@ethersproject/wallet": "^5.0.1",
+    "@ethersproject/wallet": "^5.6.2",
     "@fleekhq/fleek-storage-js": "^1.0.15",
-    "@pinata/sdk": "^1.1.14",
     "@pusher/push-notifications-server": "^1.2.4",
-    "@snapshot-labs/pineapple": "^0.1.0-beta.0",
+    "@snapshot-labs/pineapple": "^0.1.0-beta.1",
     "@snapshot-labs/snapshot.js": "https://github.com/martines3000/snapshot.js.git#ssi-demo",
     "@veramo/core": "3.1.2-next.94",
     "@veramo/credential-w3c": "3.1.2-next.94",
@@ -32,18 +31,17 @@
     "eslint": "^8.19.0",
     "ethereumjs-util": "^7.0.6",
     "ethers": "^5.3.1",
-    "express": "^4.17.1",
+    "express": "^4.18.1",
     "express-graphql": "^0.12.0",
     "express-rate-limit": "^5.2.6",
-    "graphql": "^15.5.0",
+    "graphql": "^15.8.0",
+    "graphql-depth-limit": "^1.1.0",
     "graphql-fields": "^2.0.3",
     "graphql-query-count-limit": "^1.0.0",
     "graphql-tools": "^7.0.5",
     "lodash": "^4.17.20",
-    "multer": "^1.4.2",
     "mysql": "^2.18.1",
-    "node-fetch": "^2.6.1",
-    "ts-node": "^9.1.1",
+    "ts-node": "^10.8.2",
     "typescript": "~3.9.3"
   },
   "devDependencies": {
@@ -51,7 +49,7 @@
     "@typescript-eslint/eslint-plugin": "^5.30.6",
     "@typescript-eslint/parser": "^5.30.6",
     "eslint-plugin-prettier": "^4.2.1",
-    "nodemon": "^2.0.7",
+    "nodemon": "^2.0.19",
     "prettier": "^2.7.1"
   }
 }
