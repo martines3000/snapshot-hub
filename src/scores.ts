@@ -22,7 +22,7 @@ async function getVotes(proposalId) {
   const query =
     'SELECT id, choice, voter, metadata FROM votes WHERE proposal = ?';
   const votes = await db.queryAsync(query, [proposalId]);
-  return votes.map(vote => {
+  return votes.map((vote) => {
     vote.choice = JSON.parse(vote.choice);
     return vote;
   });
@@ -48,12 +48,12 @@ export async function getScores(
       network,
       snapshot,
       strategies,
-      addresses
+      addresses,
     };
     const res = await fetch(scoreApiUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ params })
+      body: JSON.stringify({ params }),
     });
     const obj = await res.json();
     return obj.result;
@@ -69,6 +69,7 @@ export async function getScoresDID(
   network: string,
   addresses: string[],
   vps: any[],
+  issuer: string,
   snapshot: number | string = 'latest',
   scoreApiUrl = 'https://score.snapshot.org/api/scores'
 ) {
@@ -79,13 +80,14 @@ export async function getScoresDID(
       snapshot,
       strategies,
       addresses,
-      vps
+      vps,
+      issuer,
     };
 
     const res = await fetch(scoreApiUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ params })
+      body: JSON.stringify({ params }),
     });
 
     const obj = await res.json();
@@ -104,24 +106,25 @@ export async function getProposalScores(proposalId) {
         scores_state: proposal.scores_state,
         scores: proposal.scores,
         scores_by_strategy: proposal.scores_by_strategy,
-        scores_total: proposal.scores_total
+        scores_total: proposal.scores_total,
       };
     }
 
     // Get votes
     let votes: any = await getVotes(proposalId);
-    const voters = votes.map(vote => vote.voter);
+    const voters = votes.map((vote) => vote.voter);
 
     let scores, state;
-
-    if (Object.keys(proposal.plugins).includes('did')) {
-      const vps = votes.map(vote => JSON.parse(vote.metadata).vp);
+    const plugins = proposal.plugins;
+    if (Object.keys(plugins).includes('did')) {
+      const vps = votes.map((vote) => JSON.parse(vote.metadata).vp);
       ({ scores, state } = await getScoresDID(
         proposal.space,
         proposal.strategies,
         proposal.network,
         voters,
         vps,
+        plugins.did.issuer,
         parseInt(proposal.snapshot),
         process.env.SCORES_URL
       ));
@@ -155,7 +158,7 @@ export async function getProposalScores(proposalId) {
       scores_state: proposal.state === 'closed' ? state : 'pending',
       scores: votingClass.resultsByVoteBalance(),
       scores_by_strategy: votingClass.resultsByStrategyScore(),
-      scores_total: votingClass.sumOfResultsBalance()
+      scores_total: votingClass.sumOfResultsBalance(),
     };
 
     // Store vp
@@ -209,7 +212,7 @@ export async function getProposalScores(proposalId) {
       results.scores_total,
       ts,
       votes.length,
-      proposalId
+      proposalId,
     ]);
     // FIXME: Uncomment
     // console.log(
@@ -245,9 +248,7 @@ async function run() {
   // console.log('[scores] Run scores');
   const expires = parseInt((Date.now() / 1e3).toFixed()) - 60 * 60 * 24 * 14;
   const ts = parseInt((Date.now() / 1e3).toFixed());
-  const [
-    proposal
-  ] = await db.queryAsync(
+  const [proposal] = await db.queryAsync(
     'SELECT id, space FROM proposals WHERE created >= ? AND start <= ? AND scores_state IN (?) ORDER BY scores_updated ASC LIMIT 1',
     [expires, ts, ['', 'pending', 'invalid']]
   );

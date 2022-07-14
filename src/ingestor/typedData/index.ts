@@ -86,9 +86,9 @@ export default async function ingestor(body) {
       end: message.end,
       snapshot: message.snapshot,
       metadata: {
-        plugins: JSON.parse(message.plugins)
+        plugins: JSON.parse(message.plugins),
       },
-      type: message.type
+      type: message.type,
     };
 
   if (type === 'delete-proposal') payload = { proposal: message.proposal };
@@ -100,19 +100,22 @@ export default async function ingestor(body) {
 
     payload = {
       proposal: message.proposal,
-      choice
+      choice,
     };
 
-    if (Object.keys(JSON.parse(proposal.plugins)).includes('did')) {
+    const plugins = JSON.parse(proposal.plugins);
+    if (Object.keys(plugins).includes('did')) {
       payload = {
         ...payload,
-        metadata: message.metadata
+        metadata: JSON.parse(message.metadata),
       };
 
       try {
-        const issuer =
-          'did:ethr:rinkeby:0x0241abd662da06d0af2f0152a80bc037f65a7f901160cfe1eb35ef3f0c532a2a4d';
-        res = await verifyVP(body.address, message.metadata.vp, issuer);
+        res = await verifyVP(
+          body.address,
+          JSON.parse(message.metadata).vp,
+          plugins.did.issuer
+        );
       } catch (err) {
         console.log(err);
       }
@@ -131,9 +134,9 @@ export default async function ingestor(body) {
       timestamp: message.timestamp,
       space: message.space,
       type,
-      payload
+      payload,
     }),
-    sig: body.sig
+    sig: body.sig,
   };
   const msg = jsonParse(legacyBody.msg);
 
@@ -144,7 +147,7 @@ export default async function ingestor(body) {
       'alias',
       'subscribe',
       'unsubscribe',
-      'profile'
+      'profile',
     ].includes(type)
   ) {
     legacyBody = message;
@@ -197,7 +200,7 @@ export default async function ingestor(body) {
     ipfs,
     relayer: {
       address: relayer.address,
-      receipt
-    }
+      receipt,
+    },
   };
 }

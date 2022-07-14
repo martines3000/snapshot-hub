@@ -578,7 +578,7 @@
     minimatch "^3.1.2"
     strip-json-comments "^3.1.1"
 
-"@ethersproject/abi@5.6.4", "@ethersproject/abi@^5.0.4", "@ethersproject/abi@^5.6.3":
+"@ethersproject/abi@5.6.4", "@ethersproject/abi@^5.6.3", "@ethersproject/abi@^5.6.4":
   version "5.6.4"
   resolved "https://registry.yarnpkg.com/@ethersproject/abi/-/abi-5.6.4.tgz#f6e01b6ed391a505932698ecc0d9e7a99ee60362"
   integrity sha512-TTeZUlCeIHG6527/2goZA6gW5F8Emoc7MrZDC7hhP84aRGvW3TEdTnZR08Ls88YXM1m2SuK42Osw/jSi3uO8gg==
@@ -1427,13 +1427,12 @@
   dependencies:
     cross-fetch "^3.1.5"
 
-"@snapshot-labs/snapshot.js@^0.3.95":
-  version "0.3.104"
-  resolved "https://registry.yarnpkg.com/@snapshot-labs/snapshot.js/-/snapshot.js-0.3.104.tgz#f61dca2e228e4c6e984a1a4313811678d09e30c9"
-  integrity sha512-zfLLUIZuCfKr8iRcS+sZL/Qr5I0kwfDIniQvB1On5taH58s5YKWEt/QFWK9U2oGw008x/A5Md0lnZJ6aNdS01Q==
+"@snapshot-labs/snapshot.js@https://github.com/martines3000/snapshot.js.git#ssi-demo":
+  version "0.4.9"
+  resolved "https://github.com/martines3000/snapshot.js.git#492bcbc730bd842d6e37df6b99a828796a760fc8"
   dependencies:
     "@ensdomains/eth-ens-namehash" "^2.0.15"
-    "@ethersproject/abi" "^5.0.4"
+    "@ethersproject/abi" "^5.6.4"
     "@ethersproject/bytes" "^5.6.1"
     "@ethersproject/contracts" "^5.0.3"
     "@ethersproject/hash" "^5.6.1"
@@ -1441,7 +1440,24 @@
     "@ethersproject/wallet" "^5.4.0"
     ajv "^8.6.0"
     ajv-formats "^2.1.0"
-    cross-fetch "^3.0.6"
+    cross-fetch "^3.1.5"
+    json-to-graphql-query "^2.0.0"
+    lodash.set "^4.3.2"
+
+"@snapshot-labs/snapshot.js@martines3000/snapshot.js#ssi-demo":
+  version "0.4.9"
+  resolved "https://codeload.github.com/martines3000/snapshot.js/tar.gz/492bcbc730bd842d6e37df6b99a828796a760fc8"
+  dependencies:
+    "@ensdomains/eth-ens-namehash" "^2.0.15"
+    "@ethersproject/abi" "^5.6.4"
+    "@ethersproject/bytes" "^5.6.1"
+    "@ethersproject/contracts" "^5.0.3"
+    "@ethersproject/hash" "^5.6.1"
+    "@ethersproject/providers" "^5.3.1"
+    "@ethersproject/wallet" "^5.4.0"
+    ajv "^8.6.0"
+    ajv-formats "^2.1.0"
+    cross-fetch "^3.1.5"
     json-to-graphql-query "^2.0.0"
     lodash.set "^4.3.2"
 
@@ -2780,7 +2796,7 @@ cross-fetch@3.1.4:
   dependencies:
     node-fetch "2.6.1"
 
-cross-fetch@^3.0.6, cross-fetch@^3.1.4, cross-fetch@^3.1.5:
+cross-fetch@^3.1.4, cross-fetch@^3.1.5:
   version "3.1.5"
   resolved "https://registry.yarnpkg.com/cross-fetch/-/cross-fetch-3.1.5.tgz#e1389f44d9e7ba767907f7af8454787952ab534f"
   integrity sha512-lvb1SBsI0Z7GDwmuid+mU3kWVBwTVUbe7S0H52yaaAdQOXq2YktTCZdlAcNKFzE6QtRz0snpw9bNiPeOIkkQvw==

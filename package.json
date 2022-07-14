@@ -16,7 +16,7 @@
     "@pinata/sdk": "^1.1.14",
     "@pusher/push-notifications-server": "^1.2.4",
     "@snapshot-labs/pineapple": "^0.1.0-beta.0",
-    "@snapshot-labs/snapshot.js": "^0.3.95",
+    "@snapshot-labs/snapshot.js": "https://github.com/martines3000/snapshot.js.git#ssi-demo",
     "@veramo/core": "3.1.2-next.94",
     "@veramo/credential-w3c": "3.1.2-next.94",
     "@veramo/did-jwt": "3.1.2-next.94",

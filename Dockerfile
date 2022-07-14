@@ -1,8 +1,8 @@
-# Node version matching the version declared in the package.json 
-FROM node:14.0-slim
+# Node version matching the version declared in the package.json
+FROM node:16.16.0-slim
 
 # Update O.S.
-RUN apt-get update && apt-get upgrade -y 
+RUN apt-get update && apt-get upgrade -y
 
 # Install required O.S. packages
 RUN apt-get install -y git python make g++
@@ -25,7 +25,7 @@ RUN yarn
 # Bundle app source
 COPY --chown=node:node . .
 
-# Set the container port 
+# Set the container port
 EXPOSE 8080
 
 # Start the aplication

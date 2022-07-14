@@ -64,13 +64,15 @@ export async function verify(body): Promise<any> {
 
   try {
     let scores;
-    if (Object.keys(JSON.parse(proposal.plugins)).includes('did')) {
+    const plugins = JSON.parse(proposal.plugins);
+    if (Object.keys(plugins).includes('did')) {
       ({ scores } = await getScoresDID(
         msg.space,
         jsonParse(proposal.strategies),
         proposal.network,
         [body.address],
         [msg.payload.metadata.vp],
+        plugins.did.issuer,
         proposal.snapshot,
         process.env.SCORES_URL
       ));
