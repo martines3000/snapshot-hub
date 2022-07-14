@@ -18,7 +18,7 @@
     "@snapshot-labs/snapshot.js": "https://github.com/martines3000/snapshot.js.git#ssi-demo",
     "@veramo/core": "3.1.2-next.94",
     "@veramo/credential-w3c": "3.1.2-next.94",
-    "@veramo/did-jwt": "3.1.2-next.94",
+    "@veramo/did-jwt": "3.1.3",
     "@veramo/did-provider-ethr": "3.1.2-next.94",
     "@veramo/did-provider-web": "3.1.2-next.94",
     "@veramo/did-resolver": "3.1.2-next.94",
