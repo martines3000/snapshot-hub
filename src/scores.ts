@@ -97,8 +97,9 @@ export async function getScoresDID(
   }
 }
 
-export async function getProposalScores(proposalId) {
+export async function getProposalScores(proposalId, force = false) {
   const proposal = await getProposal(proposalId);
+  if (!force && proposal.privacy === 'shutter') return;
 
   try {
     if (proposal.scores_state === 'final') {
@@ -156,9 +157,9 @@ export async function getProposalScores(proposalId) {
 
     const results = {
       scores_state: proposal.state === 'closed' ? state : 'pending',
-      scores: votingClass.resultsByVoteBalance(),
-      scores_by_strategy: votingClass.resultsByStrategyScore(),
-      scores_total: votingClass.sumOfResultsBalance(),
+      scores: votingClass.getScores(),
+      scores_by_strategy: votingClass.getScoresByStrategy(),
+      scores_total: votingClass.getScoresTotal()
     };
 
     // Store vp
@@ -237,7 +238,7 @@ export async function getProposalScores(proposalId) {
       '[scores] Proposal invalid',
       proposal.space,
       proposal.id,
-      proposal.score_state
+      proposal.scores_state
     );
 
     return { scores_state: 'invalid' };
@@ -249,8 +250,10 @@ async function run() {
   const expires = parseInt((Date.now() / 1e3).toFixed()) - 60 * 60 * 24 * 14;
   const ts = parseInt((Date.now() / 1e3).toFixed());
   const [proposal] = await db.queryAsync(
-    'SELECT id, space FROM proposals WHERE created >= ? AND start <= ? AND scores_state IN (?) ORDER BY scores_updated ASC LIMIT 1',
-    [expires, ts, ['', 'pending', 'invalid']]
+    `SELECT id, space FROM proposals
+    WHERE created >= ? AND start <= ? AND scores_state IN (?) AND privacy != ?
+    ORDER BY scores_updated ASC LIMIT 1`,
+    [expires, ts, ['', 'pending', 'invalid'], 'shutter']
   );
   if (proposal && proposal.id) {
     // console.log('[scores] Get proposal', proposal.space, proposal.id);

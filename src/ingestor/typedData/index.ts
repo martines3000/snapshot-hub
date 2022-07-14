@@ -42,10 +42,12 @@ export default async function ingestor(body) {
     return Promise.reject('wrong types');
   let type = hashTypes[hash];
 
+  let network = '1';
   if (!['settings', 'alias', 'profile'].includes(type)) {
     if (!message.space) return Promise.reject('unknown space');
     const space = await getSpace(message.space);
     if (!space) return Promise.reject('unknown space');
+    network = space.network;
   }
 
   // Check if signing address is an alias
@@ -65,7 +67,8 @@ export default async function ingestor(body) {
   const isValid = await snapshot.utils.verify(
     body.address,
     body.sig,
-    body.data
+    body.data,
+    network
   );
 
   const id = snapshot.utils.getHash(body.data);
@@ -93,11 +96,11 @@ export default async function ingestor(body) {
 
   if (type === 'delete-proposal') payload = { proposal: message.proposal };
   if (['vote', 'vote-array', 'vote-string'].includes(type)) {
-    let choice = message.choice,
-      res;
-    const proposal = await getProposal(message.space, message.proposal);
-    if (type === 'vote-string') choice = JSON.parse(message.choice);
-
+    let choice = message.choice;
+    if (type === 'vote-string') {
+      const proposal = await getProposal(message.space, message.proposal);
+      if (proposal.privacy !== 'shutter') choice = JSON.parse(message.choice);
+    }
     payload = {
       proposal: message.proposal,
       choice,

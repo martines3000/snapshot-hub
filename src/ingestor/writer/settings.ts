@@ -20,9 +20,10 @@ export async function verify(body): Promise<any> {
   }
 
   const spaceUri = await snapshot.utils.getSpaceUri(msg.space, DEFAULT_NETWORK);
+  const spaceIdUri = encodeURIComponent(msg.space);
   const isOwner =
     spaceUri ===
-    `ipns://storage.snapshot.page/registry/${networkPath}${body.address}/${msg.space}`;
+    `ipns://storage.snapshot.page/registry/${networkPath}${body.address}/${spaceIdUri}`;
   const space = await getSpace(msg.space);
   const admins = (space?.admins || []).map(admin => admin.toLowerCase());
   const isAdmin = admins.includes(body.address.toLowerCase());
@@ -53,5 +54,6 @@ export async function action(body): Promise<void> {
     await addOrUpdateSpace(space, msg.payload);
   } catch (e) {
     console.log('[writer] Failed to store settings', msg.space, e);
+    return Promise.reject('failed store settings on IPNS');
   }
 }
