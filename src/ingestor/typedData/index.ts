@@ -89,28 +89,29 @@ export default async function ingestor(body) {
       end: message.end,
       snapshot: message.snapshot,
       metadata: {
-        plugins: JSON.parse(message.plugins),
+        plugins: JSON.parse(message.plugins)
       },
-      type: message.type,
+      type: message.type
     };
 
   if (type === 'delete-proposal') payload = { proposal: message.proposal };
   if (['vote', 'vote-array', 'vote-string'].includes(type)) {
+    const proposal = await getProposal(message.space, message.proposal);
     let choice = message.choice;
     if (type === 'vote-string') {
-      const proposal = await getProposal(message.space, message.proposal);
       if (proposal.privacy !== 'shutter') choice = JSON.parse(message.choice);
     }
     payload = {
       proposal: message.proposal,
-      choice,
+      choice
     };
 
+    let res;
     const plugins = JSON.parse(proposal.plugins);
     if (Object.keys(plugins).includes('did')) {
       payload = {
         ...payload,
-        metadata: JSON.parse(message.metadata),
+        metadata: JSON.parse(message.metadata)
       };
 
       try {
@@ -137,9 +138,9 @@ export default async function ingestor(body) {
       timestamp: message.timestamp,
       space: message.space,
       type,
-      payload,
+      payload
     }),
-    sig: body.sig,
+    sig: body.sig
   };
   const msg = jsonParse(legacyBody.msg);
 
@@ -150,7 +151,7 @@ export default async function ingestor(body) {
       'alias',
       'subscribe',
       'unsubscribe',
-      'profile',
+      'profile'
     ].includes(type)
   ) {
     legacyBody = message;
@@ -203,7 +204,7 @@ export default async function ingestor(body) {
     ipfs,
     relayer: {
       address: relayer.address,
-      receipt,
-    },
+      receipt
+    }
   };
 }
