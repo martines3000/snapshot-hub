@@ -22,7 +22,7 @@ async function getVotes(proposalId) {
   const query =
     'SELECT id, choice, voter, metadata FROM votes WHERE proposal = ?';
   const votes = await db.queryAsync(query, [proposalId]);
-  return votes.map((vote) => {
+  return votes.map(vote => {
     vote.choice = JSON.parse(vote.choice);
     return vote;
   });
@@ -48,12 +48,12 @@ export async function getScores(
       network,
       snapshot,
       strategies,
-      addresses,
+      addresses
     };
     const res = await fetch(scoreApiUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ params }),
+      body: JSON.stringify({ params })
     });
     const obj = await res.json();
     return obj.result;
@@ -81,13 +81,13 @@ export async function getScoresDID(
       strategies,
       addresses,
       vps,
-      issuer,
+      issuer
     };
 
     const res = await fetch(scoreApiUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ params }),
+      body: JSON.stringify({ params })
     });
 
     const obj = await res.json();
@@ -107,18 +107,18 @@ export async function getProposalScores(proposalId, force = false) {
         scores_state: proposal.scores_state,
         scores: proposal.scores,
         scores_by_strategy: proposal.scores_by_strategy,
-        scores_total: proposal.scores_total,
+        scores_total: proposal.scores_total
       };
     }
 
     // Get votes
     let votes: any = await getVotes(proposalId);
-    const voters = votes.map((vote) => vote.voter);
+    const voters = votes.map(vote => vote.voter);
 
     let scores, state;
     const plugins = proposal.plugins;
     if (Object.keys(plugins).includes('did')) {
-      const vps = votes.map((vote) => JSON.parse(vote.metadata).vp);
+      const vps = votes.map(vote => JSON.parse(vote.metadata).vp);
       ({ scores, state } = await getScoresDID(
         proposal.space,
         proposal.strategies,
@@ -141,9 +141,9 @@ export async function getProposalScores(proposalId, force = false) {
     }
 
     votes = votes.map((vote: any) => {
-      vote.scores = proposal.strategies.map(
-        (strategy, i) => scores[i][vote.voter] || 0
-      );
+      vote.scores = proposal.strategies.map((strategy, i) => {
+        return scores[i] && scores[i][vote.voter] ? scores[i][vote.voter] : 0;
+      });
       vote.balance = vote.scores.reduce((a, b: any) => a + b, 0);
       return vote;
     });
@@ -213,7 +213,7 @@ export async function getProposalScores(proposalId, force = false) {
       results.scores_total,
       ts,
       votes.length,
-      proposalId,
+      proposalId
     ]);
     // FIXME: Uncomment
     // console.log(
