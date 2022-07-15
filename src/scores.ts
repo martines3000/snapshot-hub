@@ -62,7 +62,6 @@ export async function getScores(
   }
 }
 
-// FIXME: Modified function from snapshot.js (the above function ^)
 export async function getScoresDID(
   space: string,
   strategies: any[],
@@ -215,13 +214,12 @@ export async function getProposalScores(proposalId, force = false) {
       votes.length,
       proposalId
     ]);
-    // FIXME: Uncomment
-    // console.log(
-    //   '[scores] Proposal updated',
-    //   proposal.id,
-    //   proposal.space,
-    //   results.scores_state
-    // );
+    console.log(
+      '[scores] Proposal updated',
+      proposal.id,
+      proposal.space,
+      results.scores_state
+    );
 
     return results;
   } catch (e) {
