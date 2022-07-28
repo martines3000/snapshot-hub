@@ -208,8 +208,8 @@ export const verifyVP = async (
         console.log('Verifiyng VCs');
         if (vp.verifiableCredential) {
           const unresolved: Array<Promise<boolean>> =
-            vp.verifiableCredential?.map(async (vc): Promise<boolean> => {
-              vc = vc as VerifiableCredential;
+            vp.verifiableCredential?.map(async (_vc): Promise<boolean> => {
+              const vc = _vc as VerifiableCredential;
               console.log('=================VERIFYING VC=================', vc);
 
               // 1. Check if JWT is valid
@@ -297,8 +297,8 @@ export const verifyVP = async (
         console.log('Verifiyng VCs');
         if (vp.verifiableCredential) {
           const unresolved: Array<Promise<boolean>> =
-            vp.verifiableCredential?.map(async (vcJwt): Promise<boolean> => {
-              vcJwt = vcJwt as string;
+            vp.verifiableCredential?.map(async (_vcJwt): Promise<boolean> => {
+              const vcJwt = _vcJwt as string;
               console.log(
                 '=================VERIFYING VC=================',
                 vcJwt
@@ -381,8 +381,9 @@ export const verifyVP = async (
           );
           return resolved.includes(true);
         } else return false;
-      } else return res;
+      } else return false;
     }
+    return false;
   } catch (err) {
     console.log(err);
     return false;
