@@ -1,4 +1,4 @@
-import { VerifiableCredential, VerifiablePresentation } from '@veramo/core';
+import { VerifiableCredential } from '@veramo/core';
 import { agent } from '../veramo/agent';
 import { EthrDID } from 'ethr-did';
 import { Resolver } from 'did-resolver';
@@ -13,16 +13,15 @@ const didResolver = new Resolver(
   })
 );
 
-const Ajv = require('ajv');
+import Ajv from 'ajv';
 const ajv = new Ajv({ allowUnionTypes: true, strict: false });
-const addFormats = require('ajv-formats');
+import addFormats from 'ajv-formats';
 
 addFormats(ajv);
 
 const schema = {
   $schema: 'http://json-schema.org/draft-07/schema#',
-  $id:
-    'https://beta.api.schemas.serto.id/v1/public/program-completion-certificate/1.0/json-schema.json',
+  $id: 'https://beta.api.schemas.serto.id/v1/public/program-completion-certificate/1.0/json-schema.json',
   title: 'Program Completion Certificate',
   $metadata: {
     slug: 'program-completion-certificate',
@@ -135,10 +134,8 @@ export const verifyVP = async (
     if (res) {
       console.log('Verifiyng VCs');
       if (vp.verifiableCredential) {
-        const unresolved: Array<Promise<
-          boolean
-        >> = vp.verifiableCredential?.map(
-          async (vc): Promise<boolean> => {
+        const unresolved: Array<Promise<boolean>> =
+          vp.verifiableCredential?.map(async (vc): Promise<boolean> => {
             vc = vc as VerifiableCredential;
             console.log('=================VERIFYING VC=================', vc);
 
@@ -155,7 +152,7 @@ export const verifyVP = async (
               console.log(validate.errors);
               return false;
             }
-            let issuer = JSON.parse(JSON.stringify(vc.issuer));
+            const issuer = JSON.parse(JSON.stringify(vc.issuer));
             // 3. verify if JWT content == VC content
             const decoded: JWTPayload = decodeJwt(vc.proof.jwt);
 
@@ -206,8 +203,7 @@ export const verifyVP = async (
             }
             console.log('Valid VP issuer');
             return true;
-          }
-        );
+          });
         const resolved = await Promise.all(unresolved);
         console.log(
           'Finished, VP contains valid VC: ',

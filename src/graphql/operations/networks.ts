@@ -1,6 +1,6 @@
 import { spaces } from '../../helpers/spaces';
 
-export default function() {
+export default function () {
   const networks = {};
   Object.values(spaces).forEach((space: any) => {
     networks[space.network] = networks[space.network]

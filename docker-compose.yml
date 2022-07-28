@@ -1,6 +1,5 @@
-version: "3.7"
+version: '3.7'
 services:
-
   # Snapshot hub
   snapshot-hub:
     build: .
@@ -13,7 +12,7 @@ services:
     depends_on:
       - snapshot-mysql
     ports:
-      - "4444:4444"
+      - '4444:4444'
 
   # Snapshot MySQL instance
   snapshot-mysql:
@@ -22,12 +21,12 @@ services:
     ports:
       - 3306:3306
     environment:
-      MYSQL_USER: "admin"
-      MYSQL_PASSWORD: "pwd"
-      MYSQL_ROOT_PASSWORD: "admin"
-      MYSQL_DATABASE: "snapshot"
+      MYSQL_USER: 'admin'
+      MYSQL_PASSWORD: 'pwd'
+      MYSQL_ROOT_PASSWORD: 'admin'
+      MYSQL_DATABASE: 'snapshot'
     volumes:
-        - "./src/helpers/database/:/docker-entrypoint-initdb.d/"
+      - './src/helpers/database/:/docker-entrypoint-initdb.d/'
 
 networks:
   default:

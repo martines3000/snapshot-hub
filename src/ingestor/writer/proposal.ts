@@ -74,9 +74,8 @@ export async function verify(body): Promise<any> {
   }
 
   try {
-    const [
-      { count_1d: proposalsDayCount, count_30d: proposalsMonthCount }
-    ] = await getRecentProposalsCount(space.id);
+    const [{ count_1d: proposalsDayCount, count_30d: proposalsMonthCount }] =
+      await getRecentProposalsCount(space.id);
 
     if (proposalsDayCount >= proposalDayLimit) {
       return Promise.reject('daily proposal limit reached');

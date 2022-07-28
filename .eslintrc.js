@@ -4,18 +4,12 @@ module.exports = {
     node: true,
     es6: true
   },
-  plugins: [
-    'prettier',
-    '@typescript-eslint'
-  ],
-  extends: [
-    'eslint:recommended',
-    'plugin:@typescript-eslint/recommended'
-  ],
+  plugins: ['prettier', '@typescript-eslint'],
+  extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended'],
   parserOptions: {
-    'parser': 'babel-eslint',
-    'ecmaVersion': 2020,
-    'sourceType': 'module'
+    parser: 'babel-eslint',
+    ecmaVersion: 2020,
+    sourceType: 'module'
   },
   rules: {
     'no-console': 'off',
@@ -28,6 +22,6 @@ module.exports = {
     '@typescript-eslint/explicit-function-return-type': 'off'
   },
   globals: {
-    'fetch': false
+    fetch: false
   }
 };

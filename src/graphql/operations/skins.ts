@@ -1,6 +1,6 @@
 import { spaces } from '../../helpers/spaces';
 
-export default function() {
+export default function () {
   const skins = {};
   Object.values(spaces).forEach((space: any) => {
     if (space.skin)

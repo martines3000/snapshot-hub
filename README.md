@@ -38,7 +38,7 @@ yarn
 
 3. Create the database schema
 
-Run this query on the MySQL database to create the initial schema with the required tables: 
+Run this query on the MySQL database to create the initial schema with the required tables:
 https://github.com/snapshot-labs/snapshot-hub/blob/master/src/helpers/schema.sql
 
 ### Run

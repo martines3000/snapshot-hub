@@ -2,7 +2,7 @@ import graphqlFields from 'graphql-fields';
 import db from '../../helpers/mysql';
 import { formatProposal, formatVote } from '../helpers';
 
-export default async function(parent, { id }, context, info) {
+export default async function (parent, { id }, context, info) {
   const requestedFields = info ? graphqlFields(info) : {};
   const query = `
     SELECT v.*, spaces.settings FROM votes v

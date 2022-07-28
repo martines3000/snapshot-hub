@@ -1,5 +1,5 @@
 // Core interfaces
-import { createAgent, IMessageHandler, IResolver } from '@veramo/core';
+import { createAgent, IResolver } from '@veramo/core';
 import { CredentialIssuer, ICredentialIssuer } from '@veramo/credential-w3c';
 // Custom resolvers
 import { DIDResolverPlugin } from '@veramo/did-resolver';
