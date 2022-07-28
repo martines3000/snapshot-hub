@@ -1833,7 +1833,7 @@
     expo-modules-autolinking "^0.0.3"
     invariant "^2.2.4"
 
-"@veramo-community/lds-ecdsa-secp256k1-recovery2020@github:uport-project/EcdsaSecp256k1RecoverySignature2020":
+"@veramo-community/lds-ecdsa-secp256k1-recovery2020@uport-project/EcdsaSecp256k1RecoverySignature2020":
   version "0.0.8"
   resolved "https://codeload.github.com/uport-project/EcdsaSecp256k1RecoverySignature2020/tar.gz/ab0db52de6f4e6663ef271a48009ba26e688ef9b"
   dependencies:
@@ -1846,7 +1846,7 @@
     crypto-ld "^7.0.0"
     json-stringify-deterministic "^1.0.7"
 
-"@veramo/core@^3.1.6-next.153+33779301":
+"@veramo/core@^3.1.6-next.150", "@veramo/core@^3.1.6-next.153+33779301":
   version "3.1.6-next.153"
   resolved "https://registry.yarnpkg.com/@veramo/core/-/core-3.1.6-next.153.tgz#6885627542a8334d6949be1a0140228cdb699221"
   integrity sha512-jY2NkEkh4sUtxj5/rKxBHgTH09djIM3rM6WGoJZAjI7WvBykt4IrXE2DP0mpVH9OdRieTxXLYaBaG4msPIvKrw==
