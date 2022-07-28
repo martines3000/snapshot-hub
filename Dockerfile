@@ -16,7 +16,8 @@ WORKDIR /home/node/app
 USER node
 
 # Copy app dependencies
-COPY package*.json ./
+COPY package.json ./
+COPY yarn.lock ./
 COPY renovate*.json ./
 
 # Install app dependencies
