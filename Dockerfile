@@ -26,8 +26,5 @@ RUN yarn
 # Bundle app source
 COPY --chown=node:node . .
 
-# Set the container port
-EXPOSE 8080
-
 # Start the aplication
 CMD ["yarn", "run", "start" ]
